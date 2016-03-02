@@ -31,7 +31,7 @@ function show() {
   var txt = this.innerHTML.trim();
 
 
-  var selected_moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/mosstreets/master/map_moscow.geo.json", {
+  var selected_moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_moscow.geo.json", {
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, selectedMarkerOptions);
         },
@@ -40,7 +40,7 @@ function show() {
         },
     });
 
-  var selected_world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/mosstreets/master/map_world.geo.json", {
+  var selected_world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_world.geo.json", {
       pointToLayer: function (feature, latlng) {
           return L.circleMarker(latlng, selectedMarkerOptions);
       },
@@ -106,7 +106,7 @@ var worldMarkerOptions = {
     fillOpacity: 0.8
 };
 
-var moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/mosstreets/master/map_moscow.geo.json", {
+var moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_moscow.geo.json", {
     pointToLayer: function (feature, latlng) {
         return L.circleMarker(latlng, moscowMarkerOptions);
     },
@@ -115,7 +115,7 @@ var moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov
     }
 });
 
-var world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/mosstreets/master/map_world.geo.json", {
+var world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_world.geo.json", {
     style: function (feature) {
       switch (feature.properties.object_class) {
           case 'населенный пункт': return {fillColor: "#003399"};
