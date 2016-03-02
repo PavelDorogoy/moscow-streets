@@ -1,0 +1,32 @@
+{
+  "name": "mosstreets",
+  "version": "1.0.0",
+  "description": "moscow streets",
+  "main": "mosstreets.js",
+  "dependencies": {
+    "browserify": "^13.0.0",
+    "leaflet": "^0.7.7",
+    "leaflet-ajax": "^2.0.0",
+    "leaflet-geojson-selector": "^0.2.2",
+    "leaflet-providers": "^1.1.7",
+    "lodash": "^4.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mosrings/mosstreets.git"
+  },
+  "keywords": [
+    "moscow",
+    "streets"
+  ],
+  "author": "grigory golikov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mosrings/mosstreets/issues"
+  },
+  "homepage": "https://github.com/mosrings/mosstreets#readme"
+}

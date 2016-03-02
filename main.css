@@ -1,0 +1,75 @@
+html, body {
+  height: 99%;
+}
+body {
+  float: none;
+  height: 100%;
+  width: auto;
+  background-color: #242426;
+}
+h1 {
+  font-size: 37px;
+  font-family: tahoma;
+  color: #242426;
+  text-align: center;
+}
+li {
+  font-family: tahoma;
+  font-size: 12px;
+  color: #666666;
+  cursor: pointer;
+}
+.left-panel {
+  min-width: 250px;
+  width: 20%;
+  height: 99%;
+  background-color: #0E0E0E;
+  float: left;
+}
+.top {
+  min-width: 250px;
+  width: auto;
+  height: 10%;
+  min-height: 100px;
+  background-color: #0E0E0E;
+}
+.list {
+  margin: 2%;
+  min-width: 250px;
+  width: auto;
+  height: 85%;
+  background-color: #0E0E0E;
+  float:left;
+  overflow-y: scroll;
+}
+.map-moscow {
+  margin-left: 0%;
+  height: 99%;
+  background-color: grey;
+}
+.map-world {
+  margin-left: 21%;
+  height: 49%;
+  margin-top: 1%;
+  background-color: grey;
+}
+::-webkit-scrollbar{
+    width:12px;
+}
+::-webkit-scrollbar-thumb{
+    border-width:1px 1px 1px 2px;
+    border-color: #777;
+    background-color: #aaa;
+}
+::-webkit-scrollbar-thumb:hover{
+    border-width: 1px 1px 1px 2px;
+    border-color: #555;
+    background-color: #777;
+}
+::-webkit-scrollbar-track{
+    border-width:0;
+}
+::-webkit-scrollbar-track:hover{
+    border-left: solid 1px #aaa;
+    background-color: #eee;
+}
