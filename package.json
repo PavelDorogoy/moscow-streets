@@ -1,8 +1,8 @@
 {
-  "name": "mosstreets",
+  "name": "ggolikov",
   "version": "1.0.0",
   "description": "moscow streets",
-  "main": "mosstreets.js",
+  "main": "main.js",
   "dependencies": {
     "browserify": "^13.0.0",
     "leaflet": "^0.7.7",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mosrings/mosstreets.git"
+    "url": "git+https://github.com/ggolikov/moscow-streets.git"
   },
   "keywords": [
     "moscow",
@@ -26,7 +26,7 @@
   "author": "grigory golikov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mosrings/mosstreets/issues"
+    "url": "https://github.com/ggolikov/moscow-streets/issues"
   },
-  "homepage": "https://github.com/mosrings/mosstreets#readme"
+  "homepage": "https://github.com/ggolikov/moscow-streets#readme"
 }
