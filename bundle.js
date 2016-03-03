@@ -19,6 +19,7 @@ mapMoscow.addLayer(layer1);
 /**
 * setting list function
 */
+
 var selected_data, Geodesic;
 var latLngArray = [];
 
