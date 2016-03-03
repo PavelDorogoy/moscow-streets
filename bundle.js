@@ -1,6 +1,37 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 require('leaflet-ajax');
 
+/** search-box
+*/
+
+var json = [
+{"name":"Абрамцевская просека"}
+,
+{"name":"Абрамцевская улица"}
+,
+{"name":"Азовская улица"}
+,
+{"name":"Алабушевская улица"}
+,
+{"name":"Алексинская улица"}
+,
+{"name":"Алма-Атинская улица"}
+,
+{"name":"Алтайская улица"}
+,
+{"name":"Амурская улица"}
+,
+{"name":"Амурский переулок"}
+,
+{"name":"Анадырский проезд"}
+]
+
+var ul = document.querySelector('.streets-list');
+for (var k = 0; k < json.length; k++) {
+    var txt = '<li>' + json[k]['name'] + '</li>';
+    ul.innerHTML += txt;
+}
+
 /**
 * Set CartoDB Dark Matter Basemap to both map-divs
 */
@@ -15,11 +46,21 @@ mapMoscow.addLayer(layer1);
 /**
 * setting list function
 */
-
+var selected_moscow_data, selected_world_data, Geodesic, number;
 var latLngArray = [];
 
 function show() {
+  if (selected_moscow_data) {
+    mapMoscow.removeLayer(selected_moscow_data);
+  }
+  if (selected_world_data) {
+    mapMoscow.removeLayer(selected_world_data);
+  }
+  if (Geodesic) {
+    mapMoscow.removeLayer(Geodesic);
+  }
   latLngArray.length = 0;
+
   var selectedMarkerOptions = {
       radius: 5,
       fillColor: "#FFFF00",
@@ -31,7 +72,7 @@ function show() {
   var txt = this.innerHTML.trim();
 
 
-  var selected_moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_moscow.geo.json", {
+  selected_moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_moscow.geo.json", {
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, selectedMarkerOptions);
         },
@@ -40,7 +81,7 @@ function show() {
         },
     });
 
-  var selected_world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_world.geo.json", {
+  selected_world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_world.geo.json", {
       pointToLayer: function (feature, latlng) {
           return L.circleMarker(latlng, selectedMarkerOptions);
       },
@@ -51,23 +92,19 @@ function show() {
   mapMoscow.addLayer(selected_moscow_data);
   mapMoscow.addLayer(selected_world_data);
 
-  var moscow;
-
   selected_moscow_data.once('data:loaded', function() {
      this.eachLayer(function(feature) {
-       latLngArray[0] = feature.getLatLng();
+       latLngArray.push(feature.getLatLng());
      })
    }, selected_moscow_data);
 
-   var world;
-
    selected_world_data.once('data:loaded', function() {
       this.eachLayer(function(feature, layer) {
-        latLngArray[1] = feature.getLatLng();
+        latLngArray.push(feature.getLatLng());
       })
     }, selected_world_data);
 
-  var Geodesic = L.geodesic([], {
+  Geodesic = L.geodesic([], {
       weight: 1.5,
       opacity: 0.7,
       color: 'yellow',
@@ -75,15 +112,21 @@ function show() {
   }).addTo(mapMoscow);
 
   setTimeout(function() {
-      Geodesic.setLatLngs([[latLngArray[0], latLngArray[1]]]);},
-      100);
+      Geodesic.setLatLngs([[latLngArray[0], latLngArray[1]]]);
+      mapMoscow.fitBounds([[latLngArray[0]], [latLngArray[1]]]);
+      console.log(latLngArray);
+    },  50);
 }
+
+console.log(number);
+
 
 var lis = document.querySelectorAll('li');
 
 for (var i = 0; i < lis.length; i++) {
     lis[i].addEventListener('click', show);
   }
+
 
 /**
 * adding Moscow and world data in geojson

@@ -33,6 +33,9 @@ li {
   min-height: 100px;
   background-color: #0E0E0E;
 }
+.search {
+  align-content: center;
+}
 .list {
   margin: 2%;
   min-width: 250px;
