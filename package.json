@@ -5,6 +5,7 @@
   "main": "main.js",
   "dependencies": {
     "browserify": "^13.0.0",
+    "js-worker-search": "^1.0.1",
     "leaflet": "^0.7.7",
     "leaflet-ajax": "^2.0.0",
     "leaflet-geojson-selector": "^0.2.2",
