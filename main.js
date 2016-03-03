@@ -139,3 +139,6 @@ var world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/
 
 mapMoscow.addLayer(moscow_data);
 mapMoscow.addLayer(world_data);
+
+/** search-box
+*/
