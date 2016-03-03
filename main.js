@@ -45,14 +45,24 @@ mapMoscow.addLayer(layer1);
 /**
 * setting list function
 */
-var selected_moscow_data, selected_world_data, Geodesic, number;
+var selected_data, Geodesic;
 var latLngArray = [];
 
 function show() {
-  if (selected_moscow_data && selected_world_data && Geodesic) {
-    mapMoscow.removeLayer(selected_moscow_data, selected_world_data, Geodesic);
+  if (selected_data) {
+    mapMoscow.removeLayer(selected_data);
+  }
+  if (Geodesic) {
+    mapMoscow.removeLayer(Geodesic);
   }
   latLngArray.length = 0;
+
+  Geodesic = L.geodesic([], {
+      weight: 1.5,
+      opacity: 0.7,
+      color: 'yellow',
+      steps: 50
+  }).addTo(mapMoscow);
 
   var selectedMarkerOptions = {
       radius: 5,
@@ -64,55 +74,32 @@ function show() {
   };
   var txt = this.innerHTML.trim();
 
-
-  selected_moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_moscow.geo.json", {
+selected_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/mosstreets_full.geo.json", {
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, selectedMarkerOptions);
         },
-        filter: function(feature, layer){
-            return feature.properties.street == txt;
+        filter: function(feature){
+          return feature.properties.street == txt;
+        },
+        onEachFeature: function(feature, layer){
+            if(+feature.properties['№'] < 499) {
+              layer.bindPopup(feature.properties.street);
+            } else {
+              layer.bindPopup(feature.properties.object + "<br>" + feature.properties.object_class);
+            }
         },
     });
 
-  selected_world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_world.geo.json", {
-      pointToLayer: function (feature, latlng) {
-          return L.circleMarker(latlng, selectedMarkerOptions);
-      },
-      filter: function(feature, layer){
-          return feature.properties.street == txt;
-      },
-  });
-  mapMoscow.addLayer(selected_moscow_data);
-  mapMoscow.addLayer(selected_world_data);
+  mapMoscow.addLayer(selected_data);
 
-  selected_moscow_data.once('data:loaded', function() {
-     this.eachLayer(function(feature) {
-       latLngArray.push(feature.getLatLng());
-     })
-   }, selected_moscow_data);
-
-   selected_world_data.once('data:loaded', function() {
+  selected_data.once('data:loaded', function() {
       this.eachLayer(function(feature, layer) {
         latLngArray.push(feature.getLatLng());
-      })
-    }, selected_world_data);
-
-  Geodesic = L.geodesic([], {
-      weight: 1.5,
-      opacity: 0.7,
-      color: 'yellow',
-      steps: 50
-  }).addTo(mapMoscow);
-
-  setTimeout(function() {
+      });
       Geodesic.setLatLngs([[latLngArray[0], latLngArray[1]]]);
       mapMoscow.fitBounds([[latLngArray[0]], [latLngArray[1]]]);
-      console.log(latLngArray);
-    },  50);
+    }, selected_data);
 }
-
-console.log(number);
-
 
 var lis = document.querySelectorAll('li');
 
