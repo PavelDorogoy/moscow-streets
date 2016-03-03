@@ -1,5 +1,9 @@
 require('leaflet-ajax');
 
+/** search-box
+*/
+
+
 /**
 * Set CartoDB Dark Matter Basemap to both map-divs
 */
@@ -14,11 +18,25 @@ mapMoscow.addLayer(layer1);
 /**
 * setting list function
 */
-
+var selected_data, Geodesic;
 var latLngArray = [];
 
 function show() {
+  if (selected_data) {
+    mapMoscow.removeLayer(selected_data);
+  }
+  if (Geodesic) {
+    mapMoscow.removeLayer(Geodesic);
+  }
   latLngArray.length = 0;
+
+  Geodesic = L.geodesic([], {
+      weight: 1.5,
+      opacity: 0.7,
+      color: 'yellow',
+      steps: 50
+  }).addTo(mapMoscow);
+
   var selectedMarkerOptions = {
       radius: 5,
       fillColor: "#FFFF00",
@@ -29,53 +47,31 @@ function show() {
   };
   var txt = this.innerHTML.trim();
 
-
-  var selected_moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_moscow.geo.json", {
+selected_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/mosstreets_full.geo.json", {
         pointToLayer: function (feature, latlng) {
             return L.circleMarker(latlng, selectedMarkerOptions);
         },
-        filter: function(feature, layer){
-            return feature.properties.street == txt;
+        filter: function(feature){
+          return feature.properties.street == txt;
+        },
+        onEachFeature: function(feature, layer){
+            if(+feature.properties['№'] < 499) {
+              layer.bindPopup(feature.properties.street);
+            } else {
+              layer.bindPopup(feature.properties.object + "<br>" + feature.properties.object_class);
+            }
         },
     });
 
-  var selected_world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/moscow-streets/master/map_world.geo.json", {
-      pointToLayer: function (feature, latlng) {
-          return L.circleMarker(latlng, selectedMarkerOptions);
-      },
-      filter: function(feature, layer){
-          return feature.properties.street == txt;
-      },
-  });
-  mapMoscow.addLayer(selected_moscow_data);
-  mapMoscow.addLayer(selected_world_data);
+  mapMoscow.addLayer(selected_data);
 
-  var moscow;
-
-  selected_moscow_data.once('data:loaded', function() {
-     this.eachLayer(function(feature) {
-       latLngArray[0] = feature.getLatLng();
-     })
-   }, selected_moscow_data);
-
-   var world;
-
-   selected_world_data.once('data:loaded', function() {
+  selected_data.once('data:loaded', function() {
       this.eachLayer(function(feature, layer) {
-        latLngArray[1] = feature.getLatLng();
-      })
-    }, selected_world_data);
-
-  var Geodesic = L.geodesic([], {
-      weight: 1.5,
-      opacity: 0.7,
-      color: 'yellow',
-      steps: 50
-  }).addTo(mapMoscow);
-
-  setTimeout(function() {
-      Geodesic.setLatLngs([[latLngArray[0], latLngArray[1]]]);},
-      100);
+        latLngArray.push(feature.getLatLng());
+      });
+      Geodesic.setLatLngs([[latLngArray[0], latLngArray[1]]]);
+      mapMoscow.fitBounds([[latLngArray[0]], [latLngArray[1]]]);
+    }, selected_data);
 }
 
 var lis = document.querySelectorAll('li');
@@ -83,6 +79,7 @@ var lis = document.querySelectorAll('li');
 for (var i = 0; i < lis.length; i++) {
     lis[i].addEventListener('click', show);
   }
+
 
 /**
 * adding Moscow and world data in geojson
