@@ -3,7 +3,6 @@ require('leaflet-ajax');
 /** search-box
 */
 
-
 /**
 * Set CartoDB Dark Matter Basemap to both map-divs
 */
@@ -19,10 +18,18 @@ mapMoscow.addLayer(layer1);
 * setting list function
 */
 
+var lis = document.querySelectorAll('li');
+
 var selected_data, Geodesic;
 var latLngArray = [];
 
 function show() {
+  for (var i = 0; i < lis.length; i++) {
+      lis[i].style.color = '#666666';
+    }
+
+  this.style.color = 'yellow';
+
   if (selected_data) {
     mapMoscow.removeLayer(selected_data);
   }
@@ -74,8 +81,6 @@ selected_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/m
       mapMoscow.fitBounds([[latLngArray[0]], [latLngArray[1]]]);
     }, selected_data);
 }
-
-var lis = document.querySelectorAll('li');
 
 for (var i = 0; i < lis.length; i++) {
     lis[i].addEventListener('click', show);
