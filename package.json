@@ -4,7 +4,6 @@
   "description": "moscow streets",
   "main": "main.js",
   "dependencies": {
-    "browserify": "^13.0.0",
     "csv2json": "^1.1.0",
     "js-search": "^1.2.2",
     "js-worker-search": "^1.0.1",
@@ -14,9 +13,14 @@
     "leaflet-providers": "^1.1.7",
     "lodash": "^4.5.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "browserify": "latest",
+    "watchify": "latest"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-js": "browserify main.js -o bundle.js",
+    "watch-js": "watchify main.js -o bundle.js"
   },
   "repository": {
     "type": "git",
