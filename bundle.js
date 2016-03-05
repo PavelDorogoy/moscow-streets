@@ -1,6 +1,19 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 require('leaflet-ajax');
 
+
+L.Map = L.Map.extend({
+                     openPopup: function(popup) {
+                     //        this.closePopup();  // just comment this
+                     this._popup = popup;
+
+                     return this.addLayer(popup).fire('popupopen', {
+                                                      popup: this._popup
+                                                      });
+                     }
+                     }); /***  end of hack ***/
+
+
 /** search-box
 */
 
@@ -20,7 +33,6 @@ mapMoscow.addLayer(layer1);
 */
 
 var lis = document.querySelectorAll('li');
-
 var selected_data, Geodesic;
 var latLngArray = [];
 
@@ -75,11 +87,16 @@ selected_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/m
   mapMoscow.addLayer(selected_data);
 
   selected_data.once('data:loaded', function() {
-      this.eachLayer(function(feature, layer) {
+      this.eachLayer(function(feature) {
         latLngArray.push(feature.getLatLng());
       });
       Geodesic.setLatLngs([[latLngArray[0], latLngArray[1]]]);
       mapMoscow.fitBounds([[latLngArray[0]], [latLngArray[1]]]);
+    }, selected_data);
+    selected_data.once('data:loaded', function() {
+        this.eachLayer(function(layer) {
+          layer.openPopup();
+        });
     }, selected_data);
 }
 
@@ -114,7 +131,7 @@ var moscow_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov
         return L.circleMarker(latlng, moscowMarkerOptions);
     },
     onEachFeature: function(feature, layer){
-        layer.bindPopup(feature.properties.street + "<br>" + feature.properties.street_wiki);
+        layer.bindPopup("<b>" + feature.properties.street + "</b>"  + "<br>" + "<a>" + feature.properties.street_wiki + "</a>");
     }
 });
 
@@ -135,11 +152,10 @@ var world_data = new L.geoJson.ajax("https://raw.githubusercontent.com/ggolikov/
         return L.circleMarker(latlng, worldMarkerOptions);
     },
     onEachFeature: function(feature, layer){
-        layer.bindPopup(feature.properties.object + "<br>" + feature.properties.object_class +  "<br>" + feature.properties.object_wiki);
+        layer.bindPopup("<b>" + feature.properties.object + "</b>" + "<br>" + feature.properties.object_class +  "<br>" +  "<a>" + feature.properties.object_wiki + "</a>");
     },
 
 });
-
 
 mapMoscow.addLayer(moscow_data);
 mapMoscow.addLayer(world_data);
